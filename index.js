@@ -18,6 +18,8 @@ const client = new MongoClient(uri, {
 client.connect((err) => {
   const images = client.db("chobirhaat").collection("images");
   const users = client.db("chobirhaat").collection("users");
+  const faq = client.db("chobirhaat").collection("faq");
+  const contact = client.db("chobirhaat").collection("contact");
   // perform actions on the collection object
 
   app.post("/uploadimg", (req, res) => {
@@ -115,6 +117,17 @@ client.connect((err) => {
     images.deleteOne({ _id: ObjectId(req.params.imgid) }).then((result) => { });
   });
 
+  // faq section
+  app.post("/addfaq", (req, res) => {
+    const newFaq = req.body;
+    faq.insertOne(newFaq);
+  });
+
+  app.get("/faq", (req, res) => {
+    faq.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
 
   // user section
   app.get("/user/:mail", (req, res) => {
@@ -134,7 +147,19 @@ client.connect((err) => {
     users.insertOne(newuser);
   });
 
+  // user contact form
+  app.post("/contactus", (req, res) => {
+    const newmsg = req.body;
+    contact.insertOne(newmsg).then(result => {
+      res.send(result.insertedCount)
+    })
+  });
 
+  app.get("/contactus", (req, res) => {
+    contact.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
 
   //console.log("database connected");
 });
