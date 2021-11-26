@@ -17,6 +17,7 @@ const client = new MongoClient(uri, {
 
 client.connect((err) => {
   const images = client.db("chobirhaat").collection("images");
+  const users = client.db("chobirhaat").collection("users");
   // perform actions on the collection object
 
   app.post("/uploadimg", (req, res) => {
@@ -112,6 +113,25 @@ client.connect((err) => {
   //deleting image
   app.delete("/image/:imgid", (req, res) => {
     images.deleteOne({ _id: ObjectId(req.params.imgid) }).then((result) => { });
+  });
+
+
+  // user section
+  app.get("/user/:mail", (req, res) => {
+    users.find({ email: req.params.mail }).toArray((err, documents) => {
+      res.send(documents[0]);
+    });
+  });
+
+  app.get("/user/:id", (req, res) => {
+    users.find({ email: req.params.id }).toArray((err, documents) => {
+      res.send(documents[0]);
+    });
+  });
+
+  app.post("/createuser", (req, res) => {
+    const newuser = req.body;
+    users.insertOne(newuser);
   });
 
 
