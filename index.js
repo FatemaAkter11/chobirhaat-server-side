@@ -165,7 +165,7 @@ client.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to CHOBIRHAAT");
+  res.send("Welcome to CHOBIRHAAT Website");
 });
 
 app.listen(process.env.PORT || port);
